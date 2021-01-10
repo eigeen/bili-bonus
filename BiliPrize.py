@@ -81,7 +81,7 @@ class BiliPrize(object):
             self.dynamicId = id[0]
 
     def SaveAsJson(self):
-        fileName = self.upName + "_" + self.dynamicId[-6:] + ".json"
+        fileName = self.upName + "_" + self.dynamicId[-6:] + "_" + BiliPrize.NowTime(self, type=1) + ".json"
         try:
             with open(fileName, 'w', encoding="utf-8") as f:
                 f.write(json.dumps(self.usersInfo, ensure_ascii=False))
@@ -91,7 +91,7 @@ class BiliPrize(object):
 
     def SaveAsExcel(self):
         tmpUserInfo = {}
-        fileName = self.upName + "_" + self.dynamicId[-6:] + ".xls"
+        fileName = self.upName + "_" + self.dynamicId[-6:] + "_" + BiliPrize.NowTime(self, type=1) + ".xls"
         workbook = xlwt.Workbook(encoding="utf-8")
         sheet = workbook.add_sheet(self.upName)
         style1 = xlwt.XFStyle()
@@ -119,8 +119,11 @@ class BiliPrize(object):
             i += 1
             yield i
 
-    def NowTime(self):
-        t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    def NowTime(self, type=0):
+        if type == 0:
+            t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        elif type == 1:
+            t = time.strftime("%Y%m%d-%H%M%S", time.localtime())
         return t
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from BiliLuckyDog import BiliPrize
+from BiliPrize import BiliPrize
 
 dynamicAddress = "477862261840413245"
 main = BiliPrize()
