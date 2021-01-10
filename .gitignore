@@ -1,3 +1,9 @@
 # Data
-.json
-.db
+*.json
+*.db
+*.txt
+*.xlsx
+*.xls
+
+# Cache
+__pycache__
