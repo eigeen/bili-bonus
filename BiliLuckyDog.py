@@ -5,21 +5,23 @@
 import requests
 import json
 import re
+import xlwt
+import time
 
 
 class BiliPrize(object):
     def __init__(self):
-        self.genId = BiliPrize.gen_scrapeid(self)
+        self.genId = BiliPrize.GenId(self)
 
     def run(self, dynamicAddress):
-        BiliPrize.get_dynamicid(self, dynamicAddress)
-        BiliPrize.get_contents(self)
+        BiliPrize.GetDynamicid(self, dynamicAddress)
+        BiliPrize.GetContents(self)
 
-    def get_contents(self):
+    def GetContents(self):
         offset = 0
         totalNum = -1
         tmpNum = 0
-        userInfo = {}
+        tmpUserInfo = {}
         self.usersInfo = []
 
         dynamicAPI = "https://api.live.bilibili.com/dynamic_repost/v1/dynamic_repost/view_repost"
@@ -44,54 +46,83 @@ class BiliPrize(object):
                 self.resp_json = json.loads(response.text)
                 if totalNum == -1:
                     totalNum = self.resp_json['data']['total_count']
-                    print("总人数：" + str(totalNum))
+                    print("总转发人数：" + str(totalNum))
+                    self.upName = self.resp_json['data']['comments'][0]['detail']['desc']['origin']\
+                        ['user_profile']['info']['uname']
             except Exception:
-                print("出现错误:")
+                print("出现错误，程序中断")
                 break
 
-            while tmpNum < 20:
+            for tmpNum in range(0, 20):
                 try:
                     uid = self.resp_json['data']['comments'][tmpNum]['uid']
                     uname = self.resp_json['data']['comments'][tmpNum]['uname']
                     ucomment = self.resp_json['data']['comments'][tmpNum]['comment']
-                    userInfo['uid'] = uid
-                    userInfo['uname'] = uname
-                    userInfo['comment'] = ucomment
-                    userInfo['scrapeId'] = next(self.genId)
-                    self.usersInfo.append(str(userInfo))
-                    tmpNum += 1
-                except IndexError:
-                    break
+                    tmpUserInfo["scrapeId"] = next(self.genId)
+                    tmpUserInfo["uid"] = uid
+                    tmpUserInfo["uname"] = uname
+                    tmpUserInfo["comment"] = ucomment
+                    self.usersInfo.append(tmpUserInfo.copy())
+                except Exception:
+                    return
             offset += 20
-            tmpNum = 0
-        print("获取完毕！")
+        print("数据获取完毕！")
 
-    def get_dynamicid(self, dynamicAddress):
+    def GetLuckyDog(self):
+        pass
+
+    def GetDynamicid(self, dynamicAddress):
         id = re.findall(r"(\d+)", dynamicAddress)
         if id == None:
             print("错误，未获取到id。\n\
             输入可能有误，请确认输入的是正确的链接或正确格式的动态id。")
         else:
             print("获取到动态id：" + id[0])
-            self.dynamicId = id
+            self.dynamicId = id[0]
 
-    def save_file(self, asJson=True):
-        if asJson == True:
-            fileName = str(self.dynamicId) + "_" + ".json"
+    def SaveAsJson(self):
+        fileName = self.upName + "_" + self.dynamicId[-6:] + ".json"
+        try:
             with open(fileName, 'w', encoding="utf-8") as f:
-                f.write(str(self.usersInfo))
+                f.write(json.dumps(self.usersInfo, ensure_ascii=False))
+            print("成功导出json文件。")
+        except Exception:
+            print("输出文件失败！")
 
-    def gen_scrapeid(self):
+    def SaveAsExcel(self):
+        tmpUserInfo = {}
+        fileName = self.upName + "_" + self.dynamicId[-6:] + ".xls"
+        workbook = xlwt.Workbook(encoding="utf-8")
+        sheet = workbook.add_sheet(self.upName)
+        style1 = xlwt.XFStyle()
+        style1.num_format_str = '0'
+        sheet.write(0, 0, "编号")
+        sheet.write(0, 1, "UID")
+        sheet.write(0, 2, "用户名")
+        sheet.write(0, 3, "转发内容")
+
+        for i in range(len(self.usersInfo)):
+            tmpUserInfo['scrapeId'] = self.usersInfo[i]['scrapeId']
+            tmpUserInfo["uid"] = self.usersInfo[i]['uid']
+            tmpUserInfo["uname"] = self.usersInfo[i]['uname']
+            tmpUserInfo["comment"] = self.usersInfo[i]['comment']
+            sheet.write(i + 1, 0, tmpUserInfo['scrapeId'])
+            sheet.write(i + 1, 1, tmpUserInfo['uid'], style=style1)
+            sheet.write(i + 1, 2, tmpUserInfo['uname'])
+            sheet.write(i + 1, 3, tmpUserInfo['comment'])
+        workbook.save(fileName)
+
+    def GenId(self):
         i = 1
         yield i
         while True:
             i += 1
             yield i
 
+    def NowTime(self):
+        t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        return t
+
 
 if __name__ == "__main__":
-    # dynamicAddress = input("输入动态id或动态链接：")
-    dynamicAddress = "477862261840413245"
-    main = BiliPrize()
-    main.run(dynamicAddress)
-    main.save_file()
+    dynamicAddress = input("输入动态id或动态链接：")
