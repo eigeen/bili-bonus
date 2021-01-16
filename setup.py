@@ -15,7 +15,7 @@ setup(
     description = info._description_,
     long_description = long_description,
     long_description_content_type = "text/markdown",
-    license = "GPL-3.0 License",
+    license = "MIT License",
 
     url = "https://github.com/eigeen/bili-dynamic-luckydraw",
     author = "Eigeen",

@@ -85,15 +85,18 @@ class Scraper(object):
 
             for tmp_num in range(0, 20):
                 try:
-                    count += 1
-                    uid = resp_json['data']['comments'][tmp_num]['uid']
-                    uname = resp_json['data']['comments'][tmp_num]['uname']
-                    ucomment = resp_json['data']['comments'][tmp_num]['comment']
-                    tmp_user_info["scrapeId"] = next(self.gen_id)
-                    tmp_user_info["uid"] = uid
-                    tmp_user_info["uname"] = uname
-                    tmp_user_info["comment"] = ucomment
-                    users_info.append(tmp_user_info.copy())
+                    if count < total_num:
+                        count += 1
+                        uid = resp_json['data']['comments'][tmp_num]['uid']
+                        uname = resp_json['data']['comments'][tmp_num]['uname']
+                        ucomment = resp_json['data']['comments'][tmp_num]['comment']
+                        tmp_user_info["scrapeId"] = next(self.gen_id)
+                        tmp_user_info["uid"] = uid
+                        tmp_user_info["uname"] = uname
+                        tmp_user_info["comment"] = ucomment
+                        users_info.append(tmp_user_info.copy())
+                    else:
+                        break
                 except Exception:
                     print("Error when collecting data.")
                     return
