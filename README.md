@@ -18,7 +18,7 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 
 ## 安装
 
-`pip install bili-luckydraw`
+`pip install bili-bonus`
 
 
 
@@ -57,17 +57,17 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 
 ### 安装：
 
-`pip install bili-luckydraw`
+`pip install bili-bonus`
 
 ### 使用：
 
-`bili-luckydraw [可选参数] <获取转发/评论 repost/comment> <链接或ID>`
+`bili-bonus [可选参数] <获取转发/评论 repost/comment> <链接或ID>`
 
 ### 快速上手
 
 获取动态[https://t.bilibili.com/477862261840413245?tab=1](https://t.bilibili.com/477862261840413245?tab=1)的所有转发数据，并导出为表格：
 
-`bili-luckydraw repost https://t.bilibili.com/477862261840413245?tab=1 -o 20210106.xls`
+`bili-bonus repost https://t.bilibili.com/477862261840413245?tab=1 -o 20210106.xls`
 
 
 
@@ -83,6 +83,6 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 
 ## 附录
 
-PyPi页面：[bili-luckydraw · PyPI](https://pypi.org/project/bili-luckydraw/)
+PyPi页面：[bili-bonus · PyPI](https://pypi.org/project/bili-bonus/)
 
 代码重构参考了项目[nICEnnnnnnnLee/LiveRecorder: you-live - A live recorder focus on China mainland livestream sites(A站/B站/斗鱼/快手) (github.com)](https://github.com/nICEnnnnnnnLee/LiveRecorder)

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-from bili_luckydraw import bili_reposts
+from bili_bonus import bili_reposts
 
 
 def arg_parser():
