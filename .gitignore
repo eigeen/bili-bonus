@@ -1,15 +1,13 @@
 # Data
 *.db
 *.xls
-
-# Cache
-__pycache__
-bili_dynamic/__pycache__
+data/
 
 # Development
 .vscode
 *.code-workspace
 .idea/
+.disabled/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
