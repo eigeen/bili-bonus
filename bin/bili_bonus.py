@@ -9,7 +9,22 @@
 
 import argparse
 import sys
-import bili_reposts
+
+from .globals import *
+from . import bili_reposts
+
+
+def init():
+    # 建立data文件夹
+    if os.path.exists(data_path_):
+        pass
+    else:
+        os.mkdir(data_path_)
+
+
+def exit_():
+    print("\n*程序运行结束\n")
+    sys.exit(os.system("pause"))
 
 
 def arg_parser():
@@ -23,6 +38,28 @@ def arg_parser():
 
 
 def main():
+    init()
+    address = input("请输入动态ID或完整的动态链接：")
+    scraper = bili_reposts.Scraper(address)
+    scraper.scrape()
+    print("*数据获取完毕")
+    exporter = bili_reposts.Exporter()
+
+    while True:
+        is_save = input("是否导出数据？(Y/n):")
+        if is_save in ['', 'y', 'Y']:
+            exporter.to_excel(r".\data\export.xls")
+            exporter.to_json(r".\data\export.json")
+            print("*数据已导出到data目录下")
+            exit_()
+        elif is_save in ['n', 'N']:
+            exit_()
+        else:
+            continue
+
+
+if __name__ == "__main__":
+    init()
     args = arg_parser()
     if args.type == "repost":
         scraper = bili_reposts.Scraper(args.address)
@@ -44,24 +81,4 @@ def main():
     elif args.type == "both":
         pass
     else:
-        print(args.type + " 参数错误，应当为repost/comment/both")
-
-
-if __name__ == "__main__":
-    address = input("请输入动态ID或完整的动态链接：")
-    scraper = bili_reposts.Scraper(address)
-    scraper.scrape()
-    print("*数据获取完毕")
-    exporter = bili_reposts.Exporter()
-
-    while True:
-        isSave = input("是否导出数据？(Y/n):")
-        if isSave in ['', 'y', 'Y']:
-            exporter.to_excel(r".\data\export.xls")
-            exporter.to_json(r".\data\export.json")
-            print("*数据已导出到data目录下")
-            sys.exit()
-        elif isSave in ['n', 'N']:
-            sys.exit()
-        else:
-            continue
+        print(args.type, " 参数错误，应当为repost/comment/both")

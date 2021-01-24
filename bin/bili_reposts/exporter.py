@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import json
-import os
-import xlwt
 import sqlite3
-from .globals import sqlite_db_path
+
+import xlwt
+
+from ..globals import *
 
 
 class Exporter(object):
     def __init__(self):
-        self.conn = sqlite3.connect(sqlite_db_path)
+        self.conn = sqlite3.connect(db_path_)
         self.cursor = self.conn.cursor()
         self.cursor.execute('''SELECT * FROM Header''')
         self.users_data = []

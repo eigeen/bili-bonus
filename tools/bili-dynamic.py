@@ -7,11 +7,12 @@
 # Homepage: https://github.com/eigeen/bili-dynamic
 # ---------------==========---------------
 
-import requests
 import json
-import sqlite3
 import os
+import sqlite3
 import sys
+
+import requests
 
 sqlite_db_path = r".\data\bili_dynamic_tmp.db"
 

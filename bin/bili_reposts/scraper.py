@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import time
-import re
-import requests
 import json
-import os
+import re
 import sqlite3
 import sys
-from .globals import sqlite_db_path
+import time
+
+import requests
+
+from ..globals import *
 
 
 # 获取时间，建议爬虫开始时获取
@@ -22,15 +23,6 @@ def now_time(type=0):  # Type0 FullTime  Type1 InFileName
     return t
 
 
-# # 生成顺序ID
-# def gen_id():
-#     i = 1
-#     yield i
-#     while True:
-#         i += 1
-#         yield i
-
-
 # URL中取ID
 def parse_url(dynamic_address):
     id = re.findall(r"(\d+)", dynamic_address)
@@ -41,17 +33,10 @@ def parse_url(dynamic_address):
         return id[0]
 
 
-def mkdir_data():
-    if os.path.exists(r".\data"):
-        pass
-    else:
-        os.mkdir(r".\data")
-
-
 def del_db():
-    if os.path.exists(sqlite_db_path):
+    if os.path.exists(db_path_):
         try:
-            os.remove(sqlite_db_path)
+            os.remove(db_path_)
         except:
             print("Error: 清除旧数据库文件失败")
             sys.exit()
@@ -62,14 +47,13 @@ class Scraper(object):
     def __init__(self, address):
         self.time = now_time(type=1)
         self.dynamic_id = parse_url(address)
-        mkdir_data()
         del_db()
 
     def scrape(self):
         count = 0
         offset = 0
         total_num = -1
-        conn = sqlite3.connect(sqlite_db_path)
+        conn = sqlite3.connect(db_path_)
         cursor = conn.cursor()
         dynamic_api = "https://api.live.bilibili.com/dynamic_repost/v1/dynamic_repost/view_repost"
         header = {
