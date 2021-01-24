@@ -74,11 +74,11 @@ class Scraper(object):
         dynamic_api = "https://api.live.bilibili.com/dynamic_repost/v1/dynamic_repost/view_repost"
         header = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
-                AppleWebKit/537.36 (KHTML, like Gecko) \
-                Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.66',
+                        AppleWebKit/537.36 (KHTML, like Gecko) \
+                        Chrome/89.0.4386.0 Safari/537.36 Edg/89.0.767.0',
             'd': '1',
-            'origin': 'https://t.bilibili.com',
-            'referer': 'https://t.bilibili.com/',
+            'origin': 'https://space.bilibili.com',
+            'referer': 'https://space.bilibili.com/',
             'sec-fetch-dest': 'empty',
             'sec-fetch-mode': 'cors',
             'sec-fetch-site': 'same-site'
