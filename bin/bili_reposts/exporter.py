@@ -13,7 +13,7 @@ class Exporter(object):
     def __init__(self):
         self.conn = sqlite3.connect(db_path_)
         self.cursor = self.conn.cursor()
-        self.cursor.execute('''SELECT * FROM Header''')
+        self.cursor.execute('''SELECT * FROM RepostHeaders''')
         self.users_data = []
         self.user_data_tmp = {}
 

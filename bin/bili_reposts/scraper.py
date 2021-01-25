@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import re
 import sqlite3
 import time
 
@@ -55,22 +56,24 @@ class Scraper(object):
             if total_num == -1:  # 初始化
                 total_num = resp_json['data']['total_count']
                 print("总转发人数：" + str(total_num))
-                up_name = resp_json['data']['comments'][0]['detail']['desc']['origin'][
-                    'user_profile']['info']['uname']
+                # up_name = resp_json['data']['comments'][0]['detail']['desc']['origin'][
+                #     'user_profile']['info']['uname']
+                up_name = "Unknown"
 
                 # 数据库初始化
                 cursor.execute('''CREATE TABLE Reposts (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    uid INT NOT NULL,
-                    user_name TEXT NOT NULL,
-                    comment TEXT NOT NULL
-                )''')
+                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        uid INT NOT NULL,
+                        user_name TEXT NOT NULL,
+                        comment TEXT NOT NULL,
+                        timestamp INT NOT NULL
+                    )''')
                 cursor.execute('''CREATE TABLE RepostHeaders (
-                    time INT NOT NULL,
-                    up_name TEXT NOT NULL,
-                    dynamic_id INT NOT NULL,
-                    total_count INT NOT NULL
-                )''')
+                        time INT NOT NULL,
+                        up_name TEXT NOT NULL,
+                        dynamic_id INT NOT NULL,
+                        total_count INT NOT NULL
+                    )''')
                 cursor.execute('''INSERT INTO RepostHeaders (time, up_name, dynamic_id, total_count) 
                     VALUES ('{}', '{}', '{}', '{}')'''.format(self.time, up_name, self.dynamic_id, total_num))
 
@@ -86,8 +89,10 @@ class Scraper(object):
                     uid = resp_json['data']['comments'][tmp_num]['uid']
                     user_name = resp_json['data']['comments'][tmp_num]['uname']
                     comment = resp_json['data']['comments'][tmp_num]['comment']
-                    cursor.execute('''INSERT INTO Reposts (uid, user_name, comment) 
-                        VALUES('{}', '{}', '{}')'''.format(uid, user_name, comment))
+                    card = resp_json['data']['comments'][tmp_num]['detail']['card']
+                    timestamp = re.findall(r"timestamp.*?(\d+)", card)[0]
+                    cursor.execute('''INSERT INTO Reposts 
+                        VALUES(NULL, '{}', '{}', '{}', '{}')'''.format(uid, user_name, comment, timestamp))
                 else:
                     break
             # except:

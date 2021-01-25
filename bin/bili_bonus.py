@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # ---------------==========---------------
-# Release_Version: 0.0.3a  *Early Version*
+# Release_Version: 0.0.3b  *Early Version*
 # Author: Eigeen
 # Homepage: https://github.com/eigeen/bili-bonus
 # ---------------==========---------------
