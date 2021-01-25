@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-import re
 import sqlite3
-import sys
 import time
 
 import requests
@@ -12,7 +10,7 @@ import requests
 from ..globals import *
 
 
-# 获取时间，建议爬虫开始时获取
+# 获取时间
 def now_time(type=0):  # Type0 FullTime  Type1 InFileName
     if type == 0:
         t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -23,31 +21,11 @@ def now_time(type=0):  # Type0 FullTime  Type1 InFileName
     return t
 
 
-# URL中取ID
-def parse_url(dynamic_address):
-    id = re.findall(r"(\d+)", dynamic_address)
-    if id == "":
-        print("错误，未获取到id。\n\
-        输入可能有误，请确认输入的是正确的链接或正确格式的动态id。")
-    else:
-        return id[0]
-
-
-def del_db():
-    if os.path.exists(db_path_):
-        try:
-            os.remove(db_path_)
-        except:
-            print("Error: 清除旧数据库文件失败")
-            sys.exit()
-
-
 # 爬虫核心
 class Scraper(object):
-    def __init__(self, address):
+    def __init__(self, dyn_id):
         self.time = now_time(type=1)
-        self.dynamic_id = parse_url(address)
-        del_db()
+        self.dynamic_id = dyn_id
 
     def scrape(self):
         count = 0
@@ -87,13 +65,13 @@ class Scraper(object):
                     user_name TEXT NOT NULL,
                     comment TEXT NOT NULL
                 )''')
-                cursor.execute('''CREATE TABLE Header (
+                cursor.execute('''CREATE TABLE RepostHeaders (
                     time INT NOT NULL,
                     up_name TEXT NOT NULL,
                     dynamic_id INT NOT NULL,
-                    total_number INT NOT NULL
+                    total_count INT NOT NULL
                 )''')
-                cursor.execute('''INSERT INTO Header (time, up_name, dynamic_id, total_number) 
+                cursor.execute('''INSERT INTO RepostHeaders (time, up_name, dynamic_id, total_count) 
                     VALUES ('{}', '{}', '{}', '{}')'''.format(self.time, up_name, self.dynamic_id, total_num))
 
             # except Exception:

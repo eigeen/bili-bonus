@@ -1,7 +1,5 @@
 # B站动态抽奖程序
 
-
-
 ## 介绍
 
 Python版本：基于Python3.9开发，建议版本>=3.6
@@ -15,9 +13,6 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 - requests
 
 - xlwt
-
-
-
 
 ## 功能
 
@@ -35,8 +30,6 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 
 - 数据导出为xls表格
 
-  
-
 计划实现的功能：
 
 - [ ] 获取评论数据
@@ -46,8 +39,6 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 - [ ] 基于Hash的可溯源高级抽奖方法
 - [ ] *断点续传
 
-
-
 ## 使用方法
 
 ### 安装外部模块
@@ -55,8 +46,6 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 执行`pip install -r requirements.txt`
 
 或运行run_scripts文件夹下的Install_requirements.bat
-
-
 
 ### 使用
 

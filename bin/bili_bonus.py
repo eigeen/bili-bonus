@@ -2,16 +2,17 @@
 # -*- coding: utf-8 -*-
 
 # ---------------==========---------------
-# Release_Version: 0.0.2  *Early Version*
+# Release_Version: 0.0.3a  *Early Version*
 # Author: Eigeen
 # Homepage: https://github.com/eigeen/bili-bonus
 # ---------------==========---------------
 
 import argparse
+import re
 import sys
 
-from .globals import *
 from . import bili_reposts
+from .globals import *
 
 
 def init():
@@ -21,10 +22,29 @@ def init():
     else:
         os.mkdir(data_path_)
 
+    # 清除旧数据库
+    if os.path.exists(db_path_):
+        try:
+            os.remove(db_path_)
+        except:
+            print("Error: 清除旧数据库文件失败")
+            sys.exit()
+
 
 def exit_():
     print("\n*程序运行结束\n")
     sys.exit(os.system("pause"))
+
+
+# URL中取ID
+def parse_url(address):
+    dyn_id = re.findall(r"(\d+)", address)
+    if dyn_id == "":
+        print("错误，未获取到id。\n\
+        输入可能有误，请确认输入的是正确的链接或正确格式的动态id。")
+        return ""
+    else:
+        return dyn_id[0]
 
 
 def arg_parser():
@@ -40,7 +60,8 @@ def arg_parser():
 def main():
     init()
     address = input("请输入动态ID或完整的动态链接：")
-    scraper = bili_reposts.Scraper(address)
+    dyn_id = parse_url(address)
+    scraper = bili_reposts.Scraper(dyn_id)
     scraper.scrape()
     print("*数据获取完毕")
     exporter = bili_reposts.Exporter()
@@ -51,11 +72,12 @@ def main():
             exporter.to_excel(r".\data\export.xls")
             exporter.to_json(r".\data\export.json")
             print("*数据已导出到data目录下")
-            exit_()
+            break
         elif is_save in ['n', 'N']:
-            exit_()
+            break
         else:
             continue
+    exit_()
 
 
 if __name__ == "__main__":

@@ -51,7 +51,7 @@ class Exporter(object):
         sheet.write(0, 2, "用户名")
         sheet.write(0, 3, "转发内容")
         for n in range(self.total_num):
-            self.cursor.execute('''SELECT * FROM Reposts WHERE id = "{}"'''.format(n+1))
+            self.cursor.execute('''SELECT * FROM Reposts WHERE id = "{}"'''.format(n + 1))
             user_data = self.cursor.fetchone()
             sheet.write(n + 1, 0, user_data[0])
             sheet.write(n + 1, 1, user_data[1], style=style1)
