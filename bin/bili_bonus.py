@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 # ---------------==========---------------
-# Release_Version: 0.0.3  *Early Version*
 # Author: Eigeen
 # Homepage: https://github.com/eigeen/bili-bonus
 # ---------------==========---------------
@@ -10,10 +9,9 @@
 import argparse
 import re
 import sys
-import os
 
-from . import bili_reposts
 from . import bili_comments
+from . import bili_reposts
 from .globals import *
 
 
