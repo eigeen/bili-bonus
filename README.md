@@ -4,7 +4,7 @@
 
 Python版本：基于Python3.9开发，建议版本>=3.6
 
-程序版本：0.0.2
+程序版本：0.0.3
 
 作者：我自己（@Eigeen）
 
@@ -32,12 +32,13 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 
 计划实现的功能：
 
-- [ ] 获取评论数据
+- [x] 获取评论数据
 - [x] 重构项目，优化调用
 - [x] 数据导出到SQL
 - [ ] 同时转发和评论的筛选
 - [ ] 基于Hash的可溯源高级抽奖方法
-- [ ] *断点续传
+
+
 
 ## 使用方法
 
@@ -45,11 +46,11 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 
 执行`pip install -r requirements.txt`
 
-或运行run_scripts文件夹下的Install_requirements.bat
+或运行Install_requirements.bat
 
 ### 使用
 
-直接运行bili-bonus.py，根据命令行提示输入参数
+直接运行主目录下的`get_reposts.py`或`get_comments.py`，根据命令行提示输入参数
 
 文件默认导出至data文件夹内
 
