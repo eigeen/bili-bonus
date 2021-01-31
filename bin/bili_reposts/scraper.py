@@ -99,6 +99,6 @@ class Scraper(object):
             if offset is None:
                 break
             now_num += 20
-            time.sleep(0.5)
+            time.sleep(0.2)
         conn.commit()
         conn.close()

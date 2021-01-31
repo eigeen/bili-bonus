@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # ---------------==========---------------
-# Release_Version: 0.0.3c  *Early Version*
+# Release_Version: 0.0.3  *Early Version*
 # Author: Eigeen
 # Homepage: https://github.com/eigeen/bili-bonus
 # ---------------==========---------------
@@ -10,8 +10,10 @@
 import argparse
 import re
 import sys
+import os
 
 from . import bili_reposts
+from . import bili_comments
 from .globals import *
 
 
@@ -58,7 +60,7 @@ def arg_parser():
 
 
 # 快速执行入口
-def main():
+def repost_main():
     init()
     address = input("请输入动态ID或完整的动态链接：")
     dyn_id = parse_url(address)
@@ -78,6 +80,16 @@ def main():
             break
         else:
             continue
+    exit_()
+
+
+def comment_main():
+    init()
+    address = input("请输入动态ID或完整的动态链接：")
+    dyn_id = parse_url(address)
+    scraper = bili_comments.Scraper(dyn_id)
+    scraper.start()
+    print("\n很抱歉，评论导出功能还在开发中，请期待后续更新。\n您暂时可以通过DB Browser软件查看data目录下的数据库")
     exit_()
 
 

@@ -6,7 +6,7 @@ import time
 
 import requests
 
-from globals import *
+from ..globals import *
 
 
 # 获取时间
@@ -24,22 +24,16 @@ class Scraper(object):
     def start(self):
         basic_info = {}
         comment_info = {}
-        comment_root = ""
         now_count = 1
         page = 1
+        dyn_detail_api = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail?dynamic_id={}"
         dyn_comment_api = "https://api.bilibili.com/x/v2/reply"
         # comment_reply_api = "https://api.bilibili.com/x/v2/reply/reply"
         headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
             AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4386.0 Safari/537.36 Edg/89.0.767.0'
         }
-        params_main = {
-            'jsonp': 'jsonp',
-            'pn': page,
-            'type': 17,
-            'oid': self.dyn_id,
-            'sort': 0
-        }
+
         # params_reply = {
         #     'jsonp': 'jsonp',
         #     'pn': 1,  #
@@ -49,7 +43,19 @@ class Scraper(object):
         #     'root': comment_root
         # }
 
+        # 获取动态oid
+        detail_text = requests.get(dyn_detail_api.format(self.dyn_id), headers=headers, timeout=10).text
+        detail_json = json.loads(detail_text)
+        oid = detail_json['data']['card']['desc']['rid']  # data►card►desc►rid
+
         # 获取基础信息
+        params_main = {
+            'jsonp': 'jsonp',
+            'pn': page,
+            'type': 11,
+            'oid': oid,
+            'sort': 0  # 0按时间排序 2按热度排序
+        }
         data_text = requests.get(dyn_comment_api, headers=headers, params=params_main, timeout=10).text
         data_json = json.loads(data_text)
         basic_info['count'] = data_json['data']['page']['count']
@@ -100,6 +106,7 @@ class Scraper(object):
                 #     reply_info['ctype'] = 1
                 #     ...
                 now_count += 1
+            time.sleep(0.2)
         conn.commit()
         conn.close()
 
@@ -115,5 +122,5 @@ if __name__ == "__main__":
         except:
             print("Error: 清除旧数据库文件失败")
             sys.exit()
-    scraper = Scraper("483065202402169510")
+    scraper = Scraper("485938784624017626")
     scraper.start()
