@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # ---------------==========---------------
-# Release_Version: 0.0.3b  *Early Version*
+# Release_Version: 0.0.3c  *Early Version*
 # Author: Eigeen
 # Homepage: https://github.com/eigeen/bili-bonus
 # ---------------==========---------------
@@ -57,12 +57,13 @@ def arg_parser():
     return args
 
 
+# 快速执行入口
 def main():
     init()
     address = input("请输入动态ID或完整的动态链接：")
     dyn_id = parse_url(address)
     scraper = bili_reposts.Scraper(dyn_id)
-    scraper.scrape()
+    scraper.start()
     print("*数据获取完毕")
     exporter = bili_reposts.Exporter()
 
@@ -85,7 +86,7 @@ if __name__ == "__main__":
     args = arg_parser()
     if args.type == "repost":
         scraper = bili_reposts.Scraper(args.address)
-        scraper.scrape()
+        scraper.start()
         exporter = bili_reposts.Exporter()
 
         splitted = args.output.split(".")

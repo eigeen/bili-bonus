@@ -21,7 +21,7 @@ class Scraper(object):
         self.time = now_time()
         pass
 
-    def scrape(self):
+    def start(self):
         basic_info = {}
         comment_info = {}
         comment_root = ""
@@ -116,4 +116,4 @@ if __name__ == "__main__":
             print("Error: 清除旧数据库文件失败")
             sys.exit()
     scraper = Scraper("483065202402169510")
-    scraper.scrape()
+    scraper.start()

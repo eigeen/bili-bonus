@@ -12,29 +12,31 @@ from ..globals import *
 
 
 # 获取时间
-def now_time(type=0):  # Type0 FullTime  Type1 InFileName
-    if type == 0:
-        t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    elif type == 1:
-        t = time.strftime("%Y%m%d-%H%M%S", time.localtime())
-    else:
-        t = None
+def now_time():  # Type0 FullTime  Type1 InFileName
+    t = time.strftime("%Y%m%d-%H%M%S", time.localtime())
     return t
+
+
+def get_offset(data_json):
+    if 'offset' in data_json['data']:
+        return data_json['data']['offset']
+    else:
+        return None
 
 
 # 爬虫核心
 class Scraper(object):
     def __init__(self, dyn_id):
-        self.time = now_time(type=1)
+        self.time = now_time()
         self.dynamic_id = dyn_id
 
-    def scrape(self):
+    def start(self):
         count = 0
-        offset = 0
+        offset = "1:0"
         total_num = -1
         conn = sqlite3.connect(db_path_)
         cursor = conn.cursor()
-        dynamic_api = "https://api.live.bilibili.com/dynamic_repost/v1/dynamic_repost/view_repost"
+        dynamic_api = "https://api.vc.bilibili.com/dynamic_repost/v1/dynamic_repost/repost_detail"
         header = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
                         AppleWebKit/537.36 (KHTML, like Gecko) \
@@ -47,57 +49,56 @@ class Scraper(object):
             'sec-fetch-site': 'same-site'
         }
 
-        self.time = now_time(type=1)
-        while offset < total_num or total_num == -1:  # 数据获取
-            # try:
+        # 首次数据获取
+        param = {'dynamic_id': self.dynamic_id, 'offset': offset}
+        data = requests.get(dynamic_api, headers=header, params=param, timeout=10)
+        data_json = json.loads(data.text)
+        total_num = data_json['data']['total']
+        print("总转发人数：" + str(total_num))
+        # up_name = data_json['data']['comments'][0]['detail']['desc']['origin'][
+        #     'user_profile']['info']['uname']
+        up_name = "Unknown"
+
+        # 数据库初始化
+        cursor.execute('''CREATE TABLE Reposts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                uid INT NOT NULL,
+                user_name TEXT NOT NULL,
+                comment TEXT NOT NULL,
+                timestamp INT NOT NULL
+            )''')
+        cursor.execute('''CREATE TABLE RepostHeaders (
+                time INT NOT NULL,
+                up_name TEXT NOT NULL,
+                dynamic_id INT NOT NULL,
+                total_count INT NOT NULL
+            )''')
+        cursor.execute('''INSERT INTO RepostHeaders (time, up_name, dynamic_id, total_count) 
+            VALUES ('{}', '{}', '{}', '{}')'''.format(self.time, up_name, self.dynamic_id, total_num))
+
+        # 获取数据
+        now_num = 0
+        while now_num < total_num:
             param = {'dynamic_id': self.dynamic_id, 'offset': offset}
-            response = requests.get(dynamic_api, headers=header, params=param, timeout=10)
-            resp_json = json.loads(response.text)
-            if total_num == -1:  # 初始化
-                total_num = resp_json['data']['total_count']
-                print("总转发人数：" + str(total_num))
-                # up_name = resp_json['data']['comments'][0]['detail']['desc']['origin'][
-                #     'user_profile']['info']['uname']
-                up_name = "Unknown"
-
-                # 数据库初始化
-                cursor.execute('''CREATE TABLE Reposts (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                        uid INT NOT NULL,
-                        user_name TEXT NOT NULL,
-                        comment TEXT NOT NULL,
-                        timestamp INT NOT NULL
-                    )''')
-                cursor.execute('''CREATE TABLE RepostHeaders (
-                        time INT NOT NULL,
-                        up_name TEXT NOT NULL,
-                        dynamic_id INT NOT NULL,
-                        total_count INT NOT NULL
-                    )''')
-                cursor.execute('''INSERT INTO RepostHeaders (time, up_name, dynamic_id, total_count) 
-                    VALUES ('{}', '{}', '{}', '{}')'''.format(self.time, up_name, self.dynamic_id, total_num))
-
-            # except Exception:
-            #     print("出现错误，程序中断")
-            #     print(response.text[:200])
-            #     return
+            data = requests.get(dynamic_api, headers=header, params=param, timeout=10)
+            data_json = json.loads(data.text)
 
             for tmp_num in range(0, 20):  # 数据写入数据库
-                # try:
                 if count < total_num:
                     count += 1
-                    uid = resp_json['data']['comments'][tmp_num]['uid']
-                    user_name = resp_json['data']['comments'][tmp_num]['uname']
-                    comment = resp_json['data']['comments'][tmp_num]['comment']
-                    card = resp_json['data']['comments'][tmp_num]['detail']['card']
-                    timestamp = re.findall(r"timestamp.*?(\d+)", card)[0]
+                    uid = data_json['data']['items'][tmp_num]['desc']['uid']
+                    user_name = data_json['data']['items'][tmp_num]['desc']['user_profile']['info']['uname']
+                    card = data_json['data']['items'][tmp_num]['card']
+                    content = re.findall("\"content\\\": \\\"(.*?)\\\"", card)[0]  # "content\": \"内容\"
+                    timestamp = data_json['data']['items'][tmp_num]['desc']['timestamp']
                     cursor.execute('''INSERT INTO Reposts 
-                        VALUES(NULL, '{}', '{}', '{}', '{}')'''.format(uid, user_name, comment, timestamp))
+                        VALUES(NULL, '{}', '{}', '{}', '{}')'''.format(uid, user_name, content, timestamp))
                 else:
                     break
-            # except:
-            #     print("Error when collecting data.")
-            #     return
-            offset += 20
+            offset = get_offset(data_json)
+            if offset is None:
+                break
+            now_num += 20
+            time.sleep(0.5)
         conn.commit()
         conn.close()
