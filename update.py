@@ -28,9 +28,11 @@ if __name__ == "__main__":
     remote_ver = re.findall(r"程序版本：(.*)", readme_text)[0]
     is_new_ver = check_ver(local_ver, remote_ver)
     if is_new_ver is True:
+        print("最新版本:", remote_ver)
         print("您当前版本已经是最新版本。")
     elif is_new_ver is False:
         print("检测到新版本:", remote_ver)
     else:
-        print("检测版本失败，获取到版本:", remote_ver)
+        print("最新版本:", remote_ver)
+        print("您当前版本已经是最新版本。")
     input("按回车键退出...")
