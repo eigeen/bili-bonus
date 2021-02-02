@@ -8,7 +8,7 @@ import time
 
 import requests
 
-from ..globals import *
+from bin.globals import *
 
 
 # 获取时间
@@ -38,9 +38,9 @@ class Scraper(object):
         cursor = conn.cursor()
         dynamic_api = "https://api.vc.bilibili.com/dynamic_repost/v1/dynamic_repost/repost_detail"
         header = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
-                        AppleWebKit/537.36 (KHTML, like Gecko) \
-                        Chrome/89.0.4386.0 Safari/537.36 Edg/89.0.767.0',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                          'AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/89.0.4386.0 Safari/537.36 Edg/89.0.767.0',
             'd': '1',
             'origin': 'https://space.bilibili.com',
             'referer': 'https://space.bilibili.com/',
@@ -57,7 +57,6 @@ class Scraper(object):
         print("总转发人数：" + str(total_num))
         # up_name = data_json['data']['comments'][0]['detail']['desc']['origin'][
         #     'user_profile']['info']['uname']
-        up_name = "Unknown"
 
         # 数据库初始化
         cursor.execute('''CREATE TABLE Reposts (
@@ -69,12 +68,13 @@ class Scraper(object):
             )''')
         cursor.execute('''CREATE TABLE RepostHeaders (
                 time INT NOT NULL,
-                up_name TEXT NOT NULL,
                 dynamic_id INT NOT NULL,
-                total_count INT NOT NULL
+                total_count INT NOT NULL,
+                raw TEXT NOT NULL
             )''')
-        cursor.execute('''INSERT INTO RepostHeaders (time, up_name, dynamic_id, total_count) 
-            VALUES ('{}', '{}', '{}', '{}')'''.format(self.time, up_name, self.dynamic_id, total_num))
+        cursor.execute('''INSERT INTO RepostHeaders  
+            VALUES ('{}', '{}', '{}', '{}')'''.format(
+            self.time, self.dynamic_id, total_num, data.text))
 
         # 获取数据
         now_num = 0

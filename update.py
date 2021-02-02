@@ -32,6 +32,7 @@ if __name__ == "__main__":
         print("您当前版本已经是最新版本。")
     elif is_new_ver is False:
         print("检测到新版本:", remote_ver)
+        print("请到https://github.com/eigeen/bili-bonus下载新版本，感谢支持。")
     else:
         print("最新版本:", remote_ver)
         print("您当前版本已经是最新版本。")

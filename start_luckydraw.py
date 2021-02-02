@@ -6,4 +6,5 @@ import sys
 from bin import bili_bonus
 
 if __name__ == "__main__":
-    sys.exit(bili_bonus.repost_main())
+    bili_bonus.main()
+    input("按回车键退出...")

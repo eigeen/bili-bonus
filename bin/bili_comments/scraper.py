@@ -6,7 +6,7 @@ import time
 
 import requests
 
-from ..globals import *
+from bin.globals import *
 
 
 # 获取时间
@@ -30,8 +30,9 @@ class Scraper(object):
         dyn_comment_api = "https://api.bilibili.com/x/v2/reply"
         # comment_reply_api = "https://api.bilibili.com/x/v2/reply/reply"
         headers = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
-            AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4386.0 Safari/537.36 Edg/89.0.767.0'
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                          'AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/89.0.4386.0 Safari/537.36 Edg/89.0.767.0'
         }
 
         # params_reply = {

@@ -3,10 +3,10 @@
 
 import json
 import sqlite3
+import xlsxwriter as xw
+import time
 
-import xlwt
-
-from ..globals import *
+from bin.globals import *
 
 
 class Exporter(object):
@@ -40,21 +40,22 @@ class Exporter(object):
         with open(file_path, 'w', encoding="utf-8") as f:
             f.write(json.dumps(self.users_data, ensure_ascii=False, sort_keys=True, indent=4))
 
-    def to_excel(self, file_path):
-        # file_name = up_name + "_" + dynamic_id[-6:] + "_" + time + ".xls"
-        workbook = xlwt.Workbook(encoding="utf-8")
-        sheet = workbook.add_sheet(self.up_name)
-        style1 = xlwt.XFStyle()
-        style1.num_format_str = '0'
+    def to_excel(self, file_path=""):
+        if not file_path:
+            file_path = time.strftime("%y%m%d%H%M%S", time.localtime()) + ".xlsx"
+        workbook = xw.Workbook(file_path)
+        sheet = workbook.add_worksheet("BiliBonusOutput")
+        num_style = workbook.add_format({'num_format': '0'})
+
         sheet.write(0, 0, "编号")
         sheet.write(0, 1, "UID")
         sheet.write(0, 2, "用户名")
         sheet.write(0, 3, "转发内容")
-        for n in range(self.total_num):
+        for n in range(len(self.users_data)):
             self.cursor.execute('''SELECT * FROM Reposts WHERE id = "{}"'''.format(n + 1))
             user_data = self.cursor.fetchone()
             sheet.write(n + 1, 0, user_data[0])
-            sheet.write(n + 1, 1, user_data[1], style=style1)
+            sheet.write(n + 1, 1, user_data[1], num_style)
             sheet.write(n + 1, 2, user_data[2])
             sheet.write(n + 1, 3, user_data[3])
-        workbook.save(file_path)
+        workbook.close()
