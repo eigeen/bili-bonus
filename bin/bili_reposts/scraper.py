@@ -33,7 +33,6 @@ class Scraper(object):
     def start(self):
         count = 0
         offset = "1:0"
-        total_num = -1
         conn = sqlite3.connect(db_path_)
         cursor = conn.cursor()
         dynamic_api = "https://api.vc.bilibili.com/dynamic_repost/v1/dynamic_repost/repost_detail"
@@ -67,7 +66,7 @@ class Scraper(object):
                 timestamp INT NOT NULL
             )''')
         cursor.execute('''CREATE TABLE RepostHeaders (
-                time INT NOT NULL,
+                scrapytime INT NOT NULL,
                 dynamic_id INT NOT NULL,
                 total_count INT NOT NULL,
                 raw TEXT NOT NULL

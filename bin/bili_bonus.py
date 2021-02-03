@@ -92,9 +92,19 @@ def parse_url(address):
 #     exit_()
 
 
-def winners(sorted_list, count):
-    for n in range(count):
-        print(sorted_list[n])
+def export_winner(winner_list):
+    all_winners = []
+    for n in range(len(winner_list)):
+        winner = {
+            'id': winner_list[n][1][0],
+            'uid': winner_list[n][0][0][1],
+            'user_name': winner_list[n][0][0][2],
+            'hash': winner_list[n][0][1],
+            'hash_delta': winner_list[n][1][1]
+        }
+        all_winners.append(winner)
+        print("="*40)
+        print("No." + str(n+1) + "\n" + str(winner))
 
 
 def repost(dyn_id):
@@ -102,9 +112,8 @@ def repost(dyn_id):
     print("*正在获取数据...")
     scraper.start()
     print("*数据获取完毕，处理中...")
-    sorted_list = luckydraw.roll()
-    count = int(input("请输入获奖用户数量："))
-    winners(sorted_list, count)
+    winner_list = luckydraw.roll()
+    export_winner(winner_list)
 
 
 def main():

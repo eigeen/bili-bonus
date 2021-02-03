@@ -7,10 +7,8 @@ import traceback
 import requests
 from lxml import etree
 
-from .calc_hash import hex2int
 
-
-def _somedate():
+def _getdate():
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(days=1)
     one_week_before_yesterday = yesterday - datetime.timedelta(days=6)
@@ -18,8 +16,11 @@ def _somedate():
 
 
 def get_standard():
+    """
+    :return: [(std_raw, std_hash_hex)]
+    """
     keyword = "python"
-    today, startday, endday = _somedate()
+    today, startday, endday = _getdate()
     url = "https://index.chinaz.com/{}/{}~{}".format(keyword, startday, endday)
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
@@ -33,8 +34,10 @@ def get_standard():
                            '/li[@class="nod-li col-blue02 w12-1"]/text()')[0]
         std_txt = str(today) + "_" + keyword + "_" + index
         hash = hashlib.md5(std_txt.encode("utf-8"))
-        standard = hex2int(hash.hexdigest())
+        std_hash = hash.hexdigest()
+        standard = (std_txt, std_hash)
         return standard
     except Exception:
         traceback.print_exc()
         input("按回车键退出...")
+
