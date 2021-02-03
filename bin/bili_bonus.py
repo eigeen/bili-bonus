@@ -100,7 +100,8 @@ def export_winner(winner_list):
             'uid': winner_list[n][0][0][1],
             'user_name': winner_list[n][0][0][2],
             'hash': winner_list[n][0][1],
-            'hash_delta': winner_list[n][1][1]
+            'hash_delta': winner_list[n][1][1],
+            'raw': winner_list[n][0][0]
         }
         all_winners.append(winner)
         print("="*40)

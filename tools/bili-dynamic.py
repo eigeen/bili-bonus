@@ -69,10 +69,6 @@ def scrape(up_uid):
     data_raw = requests.get(dynamic_api, headers=header, params=basic_param, timeout=10)
     data_json = json.loads(data_raw.text)
 
-    # 保存raw.json
-    with open(r".\data\raw.json", "w", encoding="utf-8") as f:
-        f.write(json.dumps(data_json, ensure_ascii=False, sort_keys=True, indent=4))
-
     # 数据库初始化
     mkdir_data()
     del_db()
@@ -87,6 +83,10 @@ def scrape(up_uid):
         comment TEXT NOT NULL,
         like INT NOT NULL,
         is_space_top INT NOT NULL)''')
+
+    # 保存raw.json
+    with open(r".\data\raw.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps(data_json, ensure_ascii=False, sort_keys=True, indent=4))
 
     # 写入数据库
     for n in range(len(data_json['data']['cards'])):
