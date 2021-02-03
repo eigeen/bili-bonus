@@ -8,6 +8,7 @@
 
 import argparse
 import hashlib
+import json
 import os
 import re
 import sqlite3
@@ -92,20 +93,36 @@ def parse_url(address):
 #     exit_()
 
 
-def export_winner(winner_list):
-    all_winners = []
+def build_data(winner_list):
+    tmp = []
     for n in range(len(winner_list)):
-        winner = {
-            'id': winner_list[n][1][0],
-            'uid': winner_list[n][0][0][1],
-            'user_name': winner_list[n][0][0][2],
-            'hash': winner_list[n][0][1],
-            'hash_delta': winner_list[n][1][1],
-            'raw': winner_list[n][0][0]
+        winner_dict = {
+            'id': winner_list[n][0][0],
+            'uid': winner_list[n][0][1],
+            'uname': winner_list[n][0][2],
+            'content': winner_list[n][0][3],
+            'timestamp': winner_list[n][0][4],
+            'raw': winner_list[n][0][5],
+            'hash': winner_list[n][1][1],
+            'hash_delta': winner_list[n][1][3],
         }
-        all_winners.append(winner)
-        print("="*40)
-        print("No." + str(n+1) + "\n" + str(winner))
+        tmp.append(winner_dict)
+    return tmp
+
+
+def print_winner(winner_data):
+    for n in range(len(winner_data)):
+        print("*"*40)
+        print("")
+        print("No." + str(n+1))
+        print("-编号:", winner_data[n]['id'])
+        print("-UID:", winner_data[n]['uid'])
+        print("-用户名:", winner_data[n]['uname'])
+        print("-内容:", winner_data[n]['content'])
+        print("-发送时间:", winner_data[n]['timestamp'])
+        print("-MD5:", winner_data[n]['hash'])
+        print("-MD5差异值(是否中奖的评判标准，越小越好):\n", winner_data[n]['hash_delta'])
+        print("")
 
 
 def repost(dyn_id):
@@ -114,7 +131,8 @@ def repost(dyn_id):
     scraper.start()
     print("*数据获取完毕，处理中...")
     winner_list = luckydraw.roll()
-    export_winner(winner_list)
+    winner_data = build_data(winner_list)
+    print_winner(winner_data)
 
 
 def main():

@@ -17,7 +17,7 @@ def _getdate():
 
 def get_standard():
     """
-    :return: [(std_raw, std_hash_hex)]
+    :return: [(std_raw, std_hash_hex, std_hash_int)]
     """
     keyword = "python"
     today, startday, endday = _getdate()
@@ -35,7 +35,7 @@ def get_standard():
         std_txt = str(today) + "_" + keyword + "_" + index
         hash = hashlib.md5(std_txt.encode("utf-8"))
         std_hash = hash.hexdigest()
-        standard = (std_txt, std_hash)
+        standard = (std_txt, std_hash, int(std_hash, 16))
         return standard
     except Exception:
         traceback.print_exc()
