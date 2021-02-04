@@ -3,8 +3,9 @@
 
 import json
 import sqlite3
-import xlsxwriter as xw
 import time
+
+import xlsxwriter as xw
 
 from bin.globals import *
 

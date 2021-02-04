@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
 import re
+
+import requests
+
 from bin.globals import version_ as local_ver
 
 

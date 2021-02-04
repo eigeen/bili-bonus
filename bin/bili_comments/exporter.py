@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sqlite3
 import json
+import sqlite3
 import time
+
 import xlsxwriter as xw
+
 from bin.globals import db_path_
 
 

@@ -6,32 +6,23 @@
 # Homepage: https://github.com/eigeen/bili-bonus
 # ---------------==========---------------
 
-import argparse
-import hashlib
-import json
 import os
 import re
-import sqlite3
 import sys
 
-from . import bili_comments
 from . import bili_reposts
-from .globals import data_path_, db_path_
 from . import luckydraw
+from .globals import tmp_path_, db_path_, data_path_
 
 
 def init():
     # 建立data文件夹
-    if os.path.exists(data_path_):
-        pass
-    else:
+    if not os.path.exists(data_path_):
         os.mkdir(data_path_)
 
-    # # 建立logs文件夹
-    # if os.path.exists(logs_path_):
-    #     pass
-    # else:
-    #     os.mkdir(logs_path_)
+    # 建立tmp文件夹
+    if not os.path.exists(tmp_path_):
+        os.mkdir(tmp_path_)
 
     # 清除旧数据库
     if os.path.exists(db_path_):
@@ -112,9 +103,9 @@ def build_data(winner_list):
 
 def print_winner(winner_data):
     for n in range(len(winner_data)):
-        print("*"*40)
+        print("*" * 40)
         print("")
-        print("No." + str(n+1))
+        print("No." + str(n + 1))
         print("-编号:", winner_data[n]['id'])
         print("-UID:", winner_data[n]['uid'])
         print("-用户名:", winner_data[n]['uname'])

@@ -40,4 +40,3 @@ def get_standard():
     except Exception:
         traceback.print_exc()
         input("按回车键退出...")
-
