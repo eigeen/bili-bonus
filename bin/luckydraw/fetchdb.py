@@ -5,6 +5,18 @@ import sqlite3
 from bin.globals import db_path_
 
 
+def fetch_dynid():
+    """
+    :return: str: dyn_id
+    """
+    conn = sqlite3.connect(db_path_)
+    cursor = conn.cursor()
+    cursor.execute('''SELECT dynamic_id FROM RepostHeaders''')
+    dyn_id = cursor.fetchone()
+    conn.close()
+    return dyn_id
+
+
 def fetch_std():
     """
     :return: tuple: std

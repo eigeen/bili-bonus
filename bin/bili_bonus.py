@@ -124,13 +124,15 @@ def repost(dyn_id):
     winner_list = luckydraw.roll()
     winner_data = build_data(winner_list)
     print_winner(winner_data)
+    print("\n*完整数据已保存至data目录下。\n")
 
 
 def main():
     init()
     dyn_id = parse_url(input("请输入动态ID或完整的动态链接："))
     while True:
-        mode = input("1. 转发\n2. 评论（不包括评论下的回复）\n3. 同时转发和评论筛选\n请选择要获取的内容序号：")
+        # mode = input("1. 转发\n2. 评论（不包括评论下的回复）\n3. 同时转发和评论筛选\n请选择要获取的内容序号：")
+        mode = "1"
         os.system("cls")
         if mode == "1":
             repost(dyn_id)
@@ -156,28 +158,28 @@ def main():
         #     os.system("cls")
         #     continue
 
-
-if __name__ == "__main__":
-    init()
-    args = arg_parser()
-    if args.type == "repost":
-        scraper = bili_reposts.Scraper(args.address)
-        scraper.start()
-        exporter = bili_reposts.Exporter()
-
-        splitted = args.output.split(".")
-        suffix = splitted[-1]
-        if suffix == "json":
-            exporter.to_json(args.output)
-        elif suffix == "xls":
-            exporter.to_excel(args.output)
-        else:
-            print("Error: 文件保存路径格式错误！")
-            print("-->" + args.output)
-            sys.exit()
-    elif args.type == "comment":
-        pass
-    elif args.type == "both":
-        pass
-    else:
-        print(args.type, " 参数错误，应当为repost/comment/both")
+#
+# if __name__ == "__main__":
+#     init()
+#     args = arg_parser()
+#     if args.type == "repost":
+#         scraper = bili_reposts.Scraper(args.address)
+#         scraper.start()
+#         exporter = bili_reposts.Exporter()
+#
+#         splitted = args.output.split(".")
+#         suffix = splitted[-1]
+#         if suffix == "json":
+#             exporter.to_json(args.output)
+#         elif suffix == "xls":
+#             exporter.to_excel(args.output)
+#         else:
+#             print("Error: 文件保存路径格式错误！")
+#             print("-->" + args.output)
+#             sys.exit()
+#     elif args.type == "comment":
+#         pass
+#     elif args.type == "both":
+#         pass
+#     else:
+#         print(args.type, " 参数错误，应当为repost/comment/both")
