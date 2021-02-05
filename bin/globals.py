@@ -3,7 +3,8 @@
 
 import os
 
-version_ = "0.0.4-210205-release"
+homepage_ = "https://github.com/eigeen/bili-bonus"
+version_ = "0.0.5-210205-release"
 bin_path_ = os.path.split(os.path.realpath(__file__))[0]
 data_path_ = bin_path_ + r"\..\data"
 

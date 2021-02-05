@@ -66,14 +66,14 @@ class Scraper(object):
                 timestamp INT NOT NULL
             )''')
         cursor.execute('''CREATE TABLE RepostHeaders (
-                scrapytime INT NOT NULL,
+                scrapytime TEXT NOT NULL,
                 dynamic_id INT NOT NULL,
                 total_count INT NOT NULL,
                 raw TEXT NOT NULL
             )''')
         cursor.execute('''INSERT INTO RepostHeaders  
             VALUES ('{}', '{}', '{}', '{}')'''.format(
-            self.time, self.dynamic_id, total_num, data.text))
+            self.time, int(self.dynamic_id), total_num, data.text))
 
         # 获取数据
         now_num = 0

@@ -14,7 +14,7 @@ def fetch_dynid():
     cursor.execute('''SELECT dynamic_id FROM RepostHeaders''')
     dyn_id = cursor.fetchone()
     conn.close()
-    return dyn_id
+    return dyn_id[0]
 
 
 def fetch_std():

@@ -61,7 +61,7 @@ def db_std(std):
     cursor.execute('''CREATE TABLE DrawStd (
         origin TEXT,
         std_hash TEXT,
-        std_hash_int INTEGER
+        std_hash_int TEXT
     )''')
 
     cursor.execute('''INSERT INTO DrawStd VALUES (

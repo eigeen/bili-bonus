@@ -113,6 +113,7 @@ def print_winner(winner_data):
         print("-发送时间:", winner_data[n]['timestamp'])
         print("-MD5:", winner_data[n]['hash'])
         print("-MD5差异值(是否中奖的评判标准，越小越好):\n", winner_data[n]['hash_delta'])
+        print("-MD5差异值(E):", "{:.3E}".format(int(winner_data[n]['hash_delta'])))
         print("")
 
 

@@ -20,7 +20,7 @@ def get_standard():
     :return: [(std_raw, std_hash_hex, std_hash_int)]
     """
     keyword = "python"
-    today, startday, endday = _getdate()
+    today, endday, startday = _getdate()
     url = "https://index.chinaz.com/{}/{}~{}".format(keyword, startday, endday)
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
