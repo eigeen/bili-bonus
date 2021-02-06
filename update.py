@@ -21,7 +21,8 @@ def check_ver(local, remote):
 
 if __name__ == "__main__":
     print("当前版本:", local_ver)
-    readme_url = "https://cdn.jsdelivr.net/gh/eigeen/bili-bonus/README.md"
+    # readme_url = "https://cdn.jsdelivr.net/gh/eigeen/bili-bonus/README.md"
+    readme_url = "https://gitee.com/eigeen/bili-bonus/raw/master/README.md"
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
                 AppleWebKit/537.36 (KHTML, like Gecko) \
                 Chrome/89.0.4386.0 Safari/537.36 Edg/89.0.767.0'
