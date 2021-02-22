@@ -1,11 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import datetime
 import hashlib
+import json
 import traceback
 
 import requests
 from lxml import etree
+
+from src.globalvar import headers, __temp_path__
 
 
 def _getdate():
@@ -15,28 +17,27 @@ def _getdate():
     return today, yesterday, one_week_before_yesterday
 
 
-def get_standard():
-    """
-    :return: [(std_raw, std_hash_hex, std_hash_int)]
-    """
+def exportstd(stdtxt, stdhash):
+    with open(__temp_path__ + r"\basic.json", "r", encoding="utf-8") as f:
+        origin = json.loads(f.read())
+    with open(__temp_path__ + r"\basic.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps({**origin, **{"stdtxt": stdtxt, "stdhash": stdhash}}))
+
+
+def getstd():
     keyword = "python"
     today, endday, startday = _getdate()
     url = "https://index.chinaz.com/{}/{}~{}".format(keyword, startday, endday)
-    headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                      'AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/89.0.4386.0 Safari/537.36 Edg/89.0.767.0'
-    }
     try:
         page = requests.get(url, headers=headers, timeout=10)
         tree = etree.HTML(page.text)
         index = tree.xpath('//ul[@class="zs-nodule bor-b1s tin6 clearfix"]'
                            '/li[@class="nod-li col-blue02 w12-1"]/text()')[0]
-        std_txt = str(today) + "_" + keyword + "_" + index
-        hash = hashlib.md5(std_txt.encode("utf-8"))
-        std_hash = hash.hexdigest()
-        standard = (std_txt, std_hash, int(std_hash, 16))
-        return standard
-    except Exception:
+        stdtxt = str(today) + "_" + keyword + "_" + index
+        hash = hashlib.md5(stdtxt.encode("utf-8"))
+        stdhash = hash.hexdigest()
+        exportstd(stdtxt, stdhash)
+        return stdtxt, stdhash
+    except:
         traceback.print_exc()
         input("按回车键退出...")

@@ -5,14 +5,13 @@
 
 Python版本：基于Python3.9开发，建议版本>=3.6
 
-程序版本：0.0.5-210205-release
+程序版本：0.1.0-210222-a1
 
 作者：我自己（@Eigeen）
 
 调用的外部模块：
 
 - requests
-- datetime
 - lxml
 
 
