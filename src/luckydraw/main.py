@@ -44,9 +44,17 @@ def editdistance(str1, str2):
     return matrix[len(str1)][len(str2)]
 
 
-def compare(users, std):
-    for u in users:
-        u.hashdelta = editdistance(u.hashhex, std)
+def integerdiff(hashhex, stdhash):
+    return abs(int(hashhex, 16) - int(stdhash, 16))
+
+
+def compare(users, stdhash, mode):
+    if mode == "editdistance":
+        for u in users:
+            u.hashdelta = editdistance(u.hashhex, stdhash)
+    elif mode == "integerdiff":
+        for u in users:
+            u.hashdelta = integerdiff(u.hashhex, stdhash)
 
 
 def sortbydelta(users):
@@ -59,10 +67,10 @@ def selectusers(sorted_users):
     # TODO:
 
 
-def start(users):
+def start(users, mode="integerdiff"):
     gethash(users)
     stdtxt, stdhash = getstd()
-    compare(users, stdhash)
+    compare(users, stdhash, mode)
     sorted_users = sortbydelta(users)
     exportall(sorted_users)
     selectusers(sorted_users)

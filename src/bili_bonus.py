@@ -3,7 +3,7 @@ import os
 import re
 import sys
 
-from src import reposts, luckydraw
+from src import reposts, luckydraw, comments
 from src.globalvar import __data_path__, __temp_path__, __db_path__
 
 
@@ -48,11 +48,16 @@ def main():
     dyn_id = parse_url(input("请输入动态ID或完整的动态链接："))
     while True:
         # mode = input("1. 转发\n2. 评论（不包括评论下的回复）\n3. 同时转发和评论筛选\n请选择要获取的内容序号：")
-        mode = "1"
-        os.system("cls")
+        mode = input("1. 转发\n2. 评论（不包括评论下的回复）\n请输入序号后回车：")
         if mode == "1":
             users = reposts.start(dyn_id)
             break
+        elif mode == "2":
+            users = comments.start(dyn_id)
+            break
+        else:
+            os.system("cls")
+            continue
 
     luckydraw.start(users)
     print("数据已全部导出至data目录下，请查收~")

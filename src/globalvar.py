@@ -2,7 +2,7 @@
 import os
 
 __homepage__ = "https://github.com/eigeen/bili-bonus"
-__version__ = "0.1.0-210222-a1"
+__version__ = "0.1.0-210223-a2"
 
 __bin_path__ = os.path.split(os.path.realpath(__file__))[0]
 __data_path__ = __bin_path__ + r"\..\data"

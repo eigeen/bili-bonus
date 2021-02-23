@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-class RepostUser(object):
+class User(object):
     cid = 1
 
-    def __init__(self, uid, uname, content, timestamp):
-        self.id = RepostUser.cid
+    def __init__(self, uid, uname, content, timestamp,
+                 hashhex="", hashint=""):
+        self.id = User.cid
         self.uid = uid
         self.uname = uname
         self.content = content
         self.timestamp = timestamp
-        RepostUser.cid += 1
+        self.hashhex, self.hashint = hashhex, hashint
+        User.cid += 1

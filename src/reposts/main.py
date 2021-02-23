@@ -5,17 +5,17 @@ import time
 
 import requests
 
-from src.reposts.user import RepostUser
+from src.reposts.user import User
 from src.globalvar import __temp_path__, headers
-
-
-# 获取时间
-def now_time():
-    t = time.strftime("%Y%m%d%H%M%S", time.localtime())
-    return t
+from src.utils import nowtime
 
 
 def _get_offset(data_json):
+    """
+    后一个json的offset保存在前一个json中。用于获取下一个offset。
+    :param data_json:
+    :return:
+    """
     if 'offset' in data_json['data']:
         return data_json['data']['offset']
     else:
@@ -25,7 +25,7 @@ def _get_offset(data_json):
 def start(dyn_id):
     dynamic_api = "https://api.vc.bilibili.com/dynamic_repost/v1/dynamic_repost/repost_detail"
     info = {
-        "time": now_time(),
+        "time": nowtime(),
         "dyn_id": dyn_id
     }
 
@@ -56,8 +56,10 @@ def start(dyn_id):
                 content = re_card.findall(card)[0]  # "content\": \"内容\"
                 timestamp = data_json['data']['items'][i]['desc']['timestamp']
 
-                exec("user_{:0>4d} = RepostUser(uid, uname, content, timestamp)".format(RepostUser.cid))
-                exec("users.append(user_{:0>4d})".format(RepostUser.cid - 1))
+                # TODO: 重复用户剔除
+                exec("user_{:0>4d} = User(uid, uname, content, timestamp)".format(User.cid))
+                exec("users.append(user_{:0>4d})".format(User.cid - 1))
+                # users = [user_0001<CLass>, user_0002<Class>, ...]
             else:  # 最后一页数量少于20时
                 break
         offset = _get_offset(data_json)
