@@ -42,6 +42,7 @@ def start(dyn_id):
     now_num = 0
     count = 0
     users = []
+    uidls = []
     while now_num < total_num:  # 循环获取页面
         param = {'dynamic_id': dyn_id, 'offset': offset}
         data = requests.get(dynamic_api, headers=headers, params=param, timeout=10)
@@ -56,7 +57,11 @@ def start(dyn_id):
                 content = re_card.findall(card)[0]  # "content\": \"内容\"
                 timestamp = data_json['data']['items'][i]['desc']['timestamp']
 
-                # TODO: 重复用户剔除
+                # 包含重复用户剔除
+                if uid in uidls:
+                    continue
+                else:
+                    uidls.append(uid)
                 exec("user_{:0>4d} = User(uid, uname, content, timestamp)".format(User.cid))
                 exec("users.append(user_{:0>4d})".format(User.cid - 1))
                 # users = [user_0001<CLass>, user_0002<Class>, ...]

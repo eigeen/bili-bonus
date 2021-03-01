@@ -66,7 +66,7 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 
 ### 标准数据构造
 
-标准数据采用关键词"python"的全网指数，源页面：https://index.chinaz.com/python/7，日期为抽奖当天日期的前七天。
+标准数据采用关键词"python"的全网指数，源页面：[https://index.chinaz.com/python/7](https://index.chinaz.com/python/7)，日期为抽奖当天日期的前七天。
 
 > 数据样例：`2021-02-05_python_67,823`
 >
