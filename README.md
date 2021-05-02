@@ -1,5 +1,6 @@
-
 # B站动态抽奖程序
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Feigeen%2Fbili-bonus.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Feigeen%2Fbili-bonus?ref=badge_shield)
+
 
 ## 介绍
 
@@ -75,3 +76,6 @@ Python版本：基于Python3.9开发，建议版本>=3.6
 ### 判断方式
 
 将评论和标准数据的MD5转为10进制整数，评论MD5最接近标准数据MD5，则为中奖。所有评论的数据会依照MD5的差值递增排序，若抽取5名，则前五名为中奖者。
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Feigeen%2Fbili-bonus.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Feigeen%2Fbili-bonus?ref=badge_large)
